@@ -1,0 +1,511 @@
+openapi: 3.0.3
+info:
+  title: API Spotify – Trabalho Acadêmico
+  version: 1.0.0
+  description: >
+    Documentação organizada por integrante contendo exatamente 30 endpoints,
+    com fluxo automático para gerar o token OAuth e exemplos preenchidos.
+
+servers:
+  - url: https://api.spotify.com/v1
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+# ---------------------------------------------------------
+# AUTENTICAÇÃO COMPLETA VIA CLIENT_CREDENTIALS
+# ---------------------------------------------------------
+paths:
+  /api/token:
+    post:
+      tags: ["Auth"]
+      summary: Obter token OAuth2 usando Client ID + Secret
+      description: Retorna um access_token válido para uso nos demais endpoints.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - client_id
+                - client_secret
+                - grant_type
+              properties:
+                client_id:
+                  type: string
+                  description: Seu Client ID do Spotify Dashboard
+                client_secret:
+                  type: string
+                  description: Seu Client Secret do Spotify Dashboard
+                grant_type:
+                  type: string
+                  enum: [client_credentials]
+                  example: client_credentials
+            examples:
+              example1:
+                summary: Exemplo de autenticação
+                value:
+                  client_id: "seu_client_id_aqui"
+                  client_secret: "seu_client_secret_aqui"
+                  grant_type: "client_credentials"
+      responses:
+        "200":
+          description: Token gerado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: integer
+      servers:
+        - url: https://accounts.spotify.com
+
+# =========================================================
+# ===============   VICTOR VAHID (6)   ====================
+# =========================================================
+
+  /tracks/{id}:
+    get:
+      tags: ["Victor Vahid"]
+      summary: Buscar faixa pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 3z8h0TU7ReDPLIbEnYhWZb
+          schema: { type: string }
+      responses:
+        "200": { description: Sucesso }
+        "404": { description: Não encontrada }
+
+  /artists/{id}/albums:
+    get:
+      tags: ["Victor Vahid"]
+      summary: Buscar álbuns de um artista
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 0oSGxfWSnnOXhD2fKuz2Gy
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+        - name: offset
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Lista de álbuns }
+
+  /search:
+    get:
+      tags: ["Victor Vahid"]
+      summary: Buscar artistas
+      parameters:
+        - name: q
+          in: query
+          required: true
+          example: Lady Gaga
+          schema: { type: string }
+        - name: type
+          in: query
+          required: true
+          example: artist
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Resultado da busca }
+
+  /browse/new-releases:
+    get:
+      tags: ["Victor Vahid"]
+      summary: Novos lançamentos
+      parameters:
+        - name: country
+          in: query
+          example: BR
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Novos lançamentos }
+
+  /artists/{id}:
+    get:
+      tags: ["Victor Vahid"]
+      summary: Buscar artista
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 4aawyAB9vmqN3uQ7FjRGXX
+          schema: { type: string }
+      responses:
+        "200": { description: Artista encontrado }
+        "404": { description: Artista não encontrado }
+
+  /shows/{id}:
+    get:
+      tags: ["Victor Vahid"]
+      summary: Buscar show/podcast
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 1GLSDdk9CDEwziGNIlnb8a
+          schema: { type: string }
+      responses:
+        "200": { description: Show encontrado }
+
+# =========================================================
+# ===============   CARLOS EDUARDO (6)  ===================
+# =========================================================
+
+  /albums/{id}:
+    get:
+      tags: ["Carlos Eduardo"]
+      summary: Consultar álbum
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 6JWc4iAiJ9FjyK0B59ABb4
+          schema: { type: string }
+      responses:
+        "200": { description: Álbum retornado }
+
+  /albums/{id}/tracks:
+    get:
+      tags: ["Carlos Eduardo"]
+      summary: Listar músicas de um álbum
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 6JWc4iAiJ9FjyK0B59ABb4
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Faixas do álbum }
+
+  /artists/{id}/related-artists:
+    get:
+      tags: ["Carlos Eduardo"]
+      summary: Artistas relacionados
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 1vCWHaC5f2uS3yhpwWbIA6
+          schema: { type: string }
+      responses:
+        "200": { description: Artistas relacionados }
+
+  /artists/{id}/top-tracks:
+    get:
+      tags: ["Carlos Eduardo"]
+      summary: Top tracks do artista
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 66CXWjxzNUsdJxJ2JdwvnR
+          schema: { type: string }
+        - name: market
+          in: query
+          example: BR
+          schema: { type: string }
+      responses:
+        "200": { description: Lista de top tracks }
+
+  /browse/categories:
+    get:
+      tags: ["Carlos Eduardo"]
+      summary: Categorias disponíveis
+      parameters:
+        - name: country
+          in: query
+          example: BR
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Categorias retornadas }
+
+  /browse/categories/{id}:
+    get:
+      tags: ["Carlos Eduardo"]
+      summary: Detalhes de categoria
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: pop
+          schema: { type: string }
+      responses:
+        "200": { description: Categoria }
+
+# =========================================================
+# ===============   EVELLYN OLIVEIRA (6)  =================
+# =========================================================
+
+  /playlists/{id}:
+    get:
+      tags: ["Evellyn Oliveira"]
+      summary: Buscar playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 37i9dQZF1DXcBWIGoYBM5M
+          schema: { type: string }
+      responses:
+        "200": { description: Playlist encontrada }
+
+  /playlists/{id}/tracks:
+    get:
+      tags: ["Evellyn Oliveira"]
+      summary: Faixas da playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 37i9dQZF1DXcBWIGoYBM5M
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Faixas listadas }
+
+  /browse/featured-playlists:
+    get:
+      tags: ["Evellyn Oliveira"]
+      summary: Playlists em destaque
+      parameters:
+        - name: country
+          in: query
+          example: BR
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Lista retornada }
+
+  /me/player/recently-played:
+    get:
+      tags: ["Evellyn Oliveira"]
+      summary: Músicas ouvidas recentemente
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Histórico }
+
+  /me/top/tracks:
+    get:
+      tags: ["Evellyn Oliveira"]
+      summary: Suas músicas mais ouvidas
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer }
+        - name: time_range
+          in: query
+          schema: { type: string }
+      responses:
+        "200": { description: Top tracks }
+
+  /me/top/artists:
+    get:
+      tags: ["Evellyn Oliveira"]
+      summary: Seus artistas mais ouvidos
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Top artistas }
+
+# =========================================================
+# ===============   MARCELO VINÍCIUS (6)  =================
+# =========================================================
+
+  /shows/{id}/episodes:
+    get:
+      tags: ["Marcelo Vinícius"]
+      summary: Listar episódios de show
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 38bS44xjbVVZ3No3ByF1dJ
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Episódios retornados }
+
+  /episodes/{id}:
+    get:
+      tags: ["Marcelo Vinícius"]
+      summary: Buscar episódio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 512ojhOuo1ktJprKbVcKyQ
+          schema: { type: string }
+      responses:
+        "200": { description: Episódio retornado }
+
+  /audiobooks/{id}:
+    get:
+      tags: ["Marcelo Vinícius"]
+      summary: Audiobook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 7iHfD0F36bwy1cLIMdQWxx
+          schema: { type: string }
+      responses:
+        "200": { description: Audiobook }
+
+  /audiobooks/{id}/chapters:
+    get:
+      tags: ["Marcelo Vinícius"]
+      summary: Capítulos de audiobook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 7iHfD0F36bwy1cLIMdQWxx
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Capítulos }
+
+  /chapters/{id}:
+    get:
+      tags: ["Marcelo Vinícius"]
+      summary: Buscar capítulo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: 0D5wENdkYwlG5x6hQzBP5N
+          schema: { type: string }
+      responses:
+        "200": { description: Capítulo }
+
+  /markets:
+    get:
+      tags: ["Marcelo Vinícius"]
+      summary: Listar mercados disponíveis
+      responses:
+        "200": { description: Lista de mercados }
+
+# =========================================================
+# ===============   STEFANY TAVEIRA (6)  ==================
+# =========================================================
+
+  /users/{id}:
+    get:
+      tags: ["Stefany Taveira"]
+      summary: Buscar usuário
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: spotify
+          schema: { type: string }
+      responses:
+        "200": { description: Usuário retornado }
+
+  /users/{id}/playlists:
+    get:
+      tags: ["Stefany Taveira"]
+      summary: Playlists do usuário
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: spotify
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Playlists }
+
+  /me:
+    get:
+      tags: ["Stefany Taveira"]
+      summary: Perfil do usuário autenticado
+      responses:
+        "200": { description: Perfil }
+
+  /me/following:
+    get:
+      tags: ["Stefany Taveira"]
+      summary: Quem o usuário segue
+      parameters:
+        - name: type
+          in: query
+          required: true
+          example: artist
+          schema: { type: string }
+      responses:
+        "200": { description: Seguindo }
+
+  /browse/categories/{id}/playlists:
+    get:
+      tags: ["Stefany Taveira"]
+      summary: Playlists da categoria
+      parameters:
+        - name: id
+          in: path
+          required: true
+          example: pop
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Playlists }
+
+  /me/playlists:
+    get:
+      tags: ["Stefany Taveira"]
+      summary: Playlists do usuário atual
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200": { description: Playlists do usuário }
