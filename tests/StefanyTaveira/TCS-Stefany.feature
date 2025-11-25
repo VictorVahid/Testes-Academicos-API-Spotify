@@ -61,7 +61,6 @@ Feature: Testes de Endpoints Inéditos - Stefany
     # Objetivo: Listar capítulos do livro Dune
     # -----------------------------------------------------------
     Scenario: 6. Listar capítulos do Audiobook Dune
-        # Reutilizando o ID do Dune que já sabemos que funciona
         Given defino o ID do Audiobook como "7iHfbu1YPACw6oZPAFJtqe"
         When busco capitulos do audiobook
         Then o status code deve ser 200
