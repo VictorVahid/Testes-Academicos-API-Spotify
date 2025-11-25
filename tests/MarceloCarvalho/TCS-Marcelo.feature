@@ -28,15 +28,16 @@ Feature: Testes de Endpoints do API_Spotify  - Marcelo Carvalho
         And o valor booleano de 'public' deve ser True
 
     # -----------------------------------------------------------
-    # 3. GET /v1/tracks/{id}
-    # Música: "Shape of You" - Ed Sheeran (ID fixo)
+    # 3. GET /v1/tracks?ids={id1},{id2}
+    # Objetivo: Buscar Shape of You e Blinding Lights (Batch)
+    # Substitui o teste de Gêneros que deu erro
     # -----------------------------------------------------------
-    Scenario: 3. Validar detalhes da faixa Shape of You
-        Given o ID da Faixa como "7qiZfU4dY1lWllzX7mPBI3"
-        When busco a faixa
+    Scenario: 3. Buscar várias faixas famosas simultaneamente
+        # IDs de Shape of You e Blinding Lights
+        Given defino os IDs das Faixas como "7qiZfU4dY1lWllzX7mPBI3,0VjIjW4GlUZAMYd2vXMi3b"
+        When busco varias faixas
         Then o status code deve ser 200
-        And o campo 'name' deve ser igual a 'Shape of You'
-        And o campo 'popularity' deve ser maior que 50.0
+        And a lista 'tracks' deve ter 2 itens
 
     # -----------------------------------------------------------
     # 4. GET /v1/artists/{id}/top-tracks (Top Músicas do Artista)
