@@ -17,9 +17,9 @@ def setup_album_id(album_id):
 def setup_playlist_id(playlist_id):
     test_context['playlist_id'] = playlist_id
 
-@given(parsers.parse('o ID da Faixa como "{track_id}"'))
-def setup_track_id(track_id):
-    test_context['track_id'] = track_id
+@given(parsers.parse('defino os IDs das Faixas como "{tracks_ids}"'))
+def setup_multiple_tracks(tracks_ids):
+    test_context['tracks_ids'] = tracks_ids
 
 @given(parsers.parse('o ID do Artista como "{artist_id}"'))
 def setup_artist_id(artist_id):
@@ -44,11 +44,12 @@ def get_playlist(api_base_url, access_token):
     url = f"{api_base_url}/playlists/{test_context['playlist_id']}"
     test_context['response'] = requests.get(url, headers=headers, params=params)
 
-@when("busco a faixa")
-def get_track(api_base_url, access_token):
+@when("busco varias faixas")
+def get_several_tracks(api_base_url, access_token):
     headers = {"Authorization": f"Bearer {access_token}"}
-    url = f"{api_base_url}/tracks/{test_context['track_id']}"
-    test_context['response'] = requests.get(url, headers=headers)
+    url = f"{api_base_url}/tracks"
+    params = {"ids": test_context['tracks_ids']}
+    test_context['response'] = requests.get(url, headers=headers, params=params)
 
 @when("busco as top tracks")
 def get_top_tracks(api_base_url, access_token):
