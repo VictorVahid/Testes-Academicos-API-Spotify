@@ -57,3 +57,13 @@ Feature: Testes de Endpoints do API_Spotify  - Marcelo Carvalho
         Given o ID da Playlist como "1111111111111111111111"
         When busco a playlist
         Then o status code deve ser 404
+
+        # -----------------------------------------------------------
+    # 6. GET /v1/browse/categories/{id} (Categoria Única)
+    # Objetivo: Buscar detalhes da categoria "Rock"
+    # -----------------------------------------------------------
+    Scenario: 6. Buscar detalhes da categoria Rock
+        Given defino o ID da Categoria como "rock"
+        When busco a categoria especifica
+        Then o status code deve ser 200
+        And o campo 'name' deve ser igual a 'Rock'

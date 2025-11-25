@@ -29,6 +29,10 @@ def setup_artist_id(artist_id):
 def setup_market(market):
     test_context['market'] = market
 
+@given(parsers.parse('defino o ID da Categoria como "{category_id}"'))
+def setup_category_id(category_id):
+    test_context['category_id'] = category_id
+
 # -------------------- WHENs --------------------
 
 @when("busco o album")
@@ -56,6 +60,13 @@ def get_top_tracks(api_base_url, access_token):
     headers = {"Authorization": f"Bearer {access_token}"}
     params = {"market": test_context.get('market', 'US')} 
     url = f"{api_base_url}/artists/{test_context['artist_id']}/top-tracks"
+    test_context['response'] = requests.get(url, headers=headers, params=params)
+
+@when("busco a categoria especifica")
+def get_single_category(api_base_url, access_token):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    url = f"{api_base_url}/browse/categories/{test_context['category_id']}"
+    params = {"country": "US"}
     test_context['response'] = requests.get(url, headers=headers, params=params)
 
 # -------------------- THENs --------------------
@@ -101,3 +112,8 @@ def check_list_min_len(list_name, qtd):
     data = test_context['response'].json()
     lista = data.get(list_name)
     assert len(lista) >= qtd
+
+@then(parsers.parse("o campo '{field}' deve ser igual a '{expected_value}'"))
+def check_field_value(field, expected_value):
+    data = test_context['response'].json()
+    assert data.get(field) == expected_value

@@ -55,3 +55,14 @@ Feature: Testes de Endpoints Inéditos - Stefany
         Then o status code deve ser 200
         And a lista 'markets' não deve estar vazia
         And a lista 'markets' deve ter 50 itens
+
+        # -----------------------------------------------------------
+    # 6. GET /v1/audiobooks/{id}/chapters
+    # Objetivo: Listar capítulos do livro Dune
+    # -----------------------------------------------------------
+    Scenario: 6. Listar capítulos do Audiobook Dune
+        Given defino o ID do Audiobook como "7iHfbu1YPACw6oZPAFJtqe"
+        When busco capitulos do audiobook
+        Then o status code deve ser 200
+        And a lista 'items' não deve estar vazia
+        And a lista 'items' deve ter 10 itens

@@ -64,6 +64,13 @@ def get_markets(api_base_url, access_token):
     url = f"{api_base_url}/markets"
     test_context['response'] = requests.get(url, headers=headers)
 
+@when("busco capitulos do audiobook")
+def get_audiobook_chapters(api_base_url, access_token):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    url = f"{api_base_url}/audiobooks/{test_context['audiobook_id']}/chapters"
+    params = {"market": "US", "limit": 20} 
+    test_context['response'] = requests.get(url, headers=headers, params=params)
+
 # -------------------- THENs --------------------
 
 @then(parsers.parse("o status code deve ser {status_code:d}"))
