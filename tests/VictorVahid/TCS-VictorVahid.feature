@@ -1,6 +1,6 @@
 Feature: Testes de Endpoints de Busca Pública - Victor Vahid
     Como um sistema consumidor da API Spotify
-    Eu quero validar a funcionalidade e o contrato de 5 endpoints públicos
+    Eu quero validar a funcionalidade e o contrato de 6 endpoints públicos
     Para garantir a integridade dos dados de faixas, artistas e lançamentos.
 
     # -----------------------------------------------------------
